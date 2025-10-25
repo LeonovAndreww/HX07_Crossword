@@ -114,15 +114,22 @@ class CrosswordCreator():
         False if no revision was made.
         """
         overlap = self.crossword.overlaps[x, y]
-        revised = False
-
         if overlap is None:
             return False
-
         i, j = overlap
 
+        revised = False
         for x_word in self.domains[x].copy():
-            print(x_word)
+            flag = False
+            for y_word in self.domains[y]:
+                if x_word[i] == y_word[j]:
+                    flag = True
+                    break
+            if not flag:
+                self.domains[x].remove(x_word)
+                revised = True
+
+        return revised
 
     def ac3(self, arcs=None):
         """
