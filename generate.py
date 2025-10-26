@@ -1,5 +1,7 @@
 import sys
 
+from networkx.classes import neighbors
+
 from crossword import *
 
 
@@ -140,7 +142,30 @@ class CrosswordCreator():
         Return True if arc consistency is enforced and no domains are empty;
         return False if one or more domains end up empty.
         """
-        raise NotImplementedError
+        ac3_neighbors = []
+        checked_list = []
+        arcs = dict()
+
+
+        for var in self.domains:
+            for neighbor in self.crossword.neighbors(var):
+                ac3_neighbors.append(neighbor)
+            arcs[var] = ac3_neighbors
+
+        checked = False
+        while True:
+            for arc in arcs:
+                for arc_val in arcs[arc]:
+                    if self.revise(arc, arc_val):
+                        arcs[arc].append(self.crossword.neighbors(arc))
+                    else:
+                        if arc_val == arcs[arc][-1]:
+                            checked = True
+
+        # for var in self.domains:
+        #     if var is None:
+        #         return False
+        # return True
 
     def assignment_complete(self, assignment):
         """
