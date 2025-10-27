@@ -142,30 +142,28 @@ class CrosswordCreator():
         Return True if arc consistency is enforced and no domains are empty;
         return False if one or more domains end up empty.
         """
-        ac3_neighbors = []
-        checked_list = []
-        arcs = dict()
+        que = []
+        if arcs is None:
+            for var in self.domains:
+                for nbr in self.crossword.neighbors(var):
+                    que.append((var, nbr))
+        else:
+            que = arcs.copy()
 
+        while que:
+            arc = que.pop(0)
+            var = arc[0]
+            nbr = arc[1]
 
-        for var in self.domains:
-            for neighbor in self.crossword.neighbors(var):
-                ac3_neighbors.append(neighbor)
-            arcs[var] = ac3_neighbors
+            if self.revise(var, nbr):
+                if len(self.domains[var]) == 0:
+                    return False
 
-        checked = False
-        while True:
-            for arc in arcs:
-                for arc_val in arcs[arc]:
-                    if self.revise(arc, arc_val):
-                        arcs[arc].append(self.crossword.neighbors(arc))
-                    else:
-                        if arc_val == arcs[arc][-1]:
-                            checked = True
+                for new_nbr in self.crossword.neighbors(var):
+                    if new_nbr != nbr:
+                        que.append((new_nbr, var))
 
-        # for var in self.domains:
-        #     if var is None:
-        #         return False
-        # return True
+        return True
 
     def assignment_complete(self, assignment):
         """
