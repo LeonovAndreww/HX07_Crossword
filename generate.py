@@ -1,7 +1,5 @@
 import sys
 
-from networkx.classes import neighbors
-
 from crossword import *
 
 
@@ -170,7 +168,11 @@ class CrosswordCreator():
         Return True if `assignment` is complete (i.e., assigns a value to each
         crossword variable); return False otherwise.
         """
-        raise NotImplementedError
+        if len(assignment) != len(self.domains): return False
+        for var in self.domains:
+            if var not in assignment or assignment[var] is None:
+                return False
+        return True
 
     def consistent(self, assignment):
         """
