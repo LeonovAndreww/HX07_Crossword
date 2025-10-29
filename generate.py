@@ -179,7 +179,15 @@ class CrosswordCreator():
         Return True if `assignment` is consistent (i.e., words fit in crossword
         puzzle without conflicting characters); return False otherwise.
         """
-        raise NotImplementedError
+        # TODO: repeating words check
+
+        for var in assignment:
+            if len(assignment[var]) != var.length: return False
+
+        # TODO: rewrite this while section
+        overlaps = self.crossword.overlaps
+        for x, y in overlaps:
+            if x[overlaps[x, y][0]] != y[overlaps[x, y][1]]: return False
 
     def order_domain_values(self, var, assignment):
         """
