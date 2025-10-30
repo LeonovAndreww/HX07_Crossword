@@ -189,12 +189,12 @@ class CrosswordCreator():
             if len(assignment[var]) != var.length: return False
 
         for var in assignment:
-            for nbr in self.crossword.neighbors(assignment[var]):
+            for nbr in self.crossword.neighbors(var):
                 if nbr not in assignment:
                     continue
 
                 overlap = self.crossword.overlaps[var, nbr]
-                if len(overlap) < 1:
+                if overlap is None:
                     continue
                 i = overlap[0]
                 j = overlap[1]
