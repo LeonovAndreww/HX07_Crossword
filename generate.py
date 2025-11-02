@@ -250,15 +250,28 @@ class CrosswordCreator():
         uvars = dict()
         for var in self.domains:
             if var not in assignment:
-                uvars[var] = self.domains[var]
+                uvars[var] = len(self.domains[var])
 
-        len_min = -1
+        if not uvars:
+            return None
+
+        len_min = 99999
         for var in uvars:
             if uvars[var] < len_min:
                 len_min = uvars[var]
 
+        variables = dict()
         for var in uvars:
             if uvars[var] == len_min:
+                variables[var] = len(self.crossword.neighbors(var))
+
+        nbr_max = -1
+        for var in variables:
+            if variables[var] > nbr_max:
+                nbr_max = variables[var]
+
+        for var in variables:
+            if variables[var] == nbr_max:
                 return var
 
     def backtrack(self, assignment):
