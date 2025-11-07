@@ -283,16 +283,12 @@ class CrosswordCreator():
 
         If no assignment is possible, return None.
         """
-        asgn = assignment.copy()
+        if self.assignment_complete(assignment):
+            return assignment
 
-        changed = False
-        for var in self.crossword.variables:
-            if var not in assignment:
-                changed = True
-                asgn[var] = self.domains[var]
-
-        if changed:
-            return asgn
+        var = self.select_unassigned_variable(assignment)
+        if var is None:
+            return var
 
         return None
 
