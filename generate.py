@@ -290,6 +290,13 @@ class CrosswordCreator():
         if var is None:
             return var
 
+        for  val in self.order_domain_values(var, assignment):
+            assignment[var] = val
+            if self.consistent(assignment):
+                res = self.backtrack(assignment)
+
+                if res is not None:
+                    return res
         return None
 
 def main():
