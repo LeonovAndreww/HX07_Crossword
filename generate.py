@@ -219,8 +219,10 @@ class CrosswordCreator():
 
         for word in self.domains[var]:
             for nbr in self.crossword.neighbors(var):
+                if nbr in assignment:
+                    continue
                 for nbr_word in self.domains[nbr]:
-                    overlap = self.crossword.overlaps(var, nbr)
+                    overlap = self.crossword.overlaps[var, nbr]
                     if overlap is None:
                         continue
                     i = overlap[0]
@@ -238,6 +240,8 @@ class CrosswordCreator():
                     words_list[i] = words_list[i-1]
                     words_list[i - 1] = temp
                     wasChanged = True
+
+        return words_list
 
     def select_unassigned_variable(self, assignment):
         """
